@@ -1,6 +1,6 @@
 /* Step 1: using axios, send a GET request to the following URL 
            (replacing the palceholder with your Github name):
-           https://api.github.com/users/<your name>
+           https://api.github.com/users/tajahouse
 */
 
 //Setting up
@@ -48,6 +48,8 @@ const followersArray = [];
 
 */
 
+
+
 /* List of LS Instructors Github username's: 
   tetondan
   dustinmyers
@@ -55,3 +57,10 @@ const followersArray = [];
   luishrd
   bigknell
 */
+axios.get("https://api.github.com/users/tajahouse")//semicolons will break the chain
+.then(response =>{
+  console.log('response', response.data)
+})
+.catch(err =>{
+  console.log('All wrong girl!')
+});
