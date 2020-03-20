@@ -66,7 +66,7 @@ const cardCreator = data => {
   userName.textContent = data.login;
   userLocation.textContent = data.location;
   userProfileLink.textContent = "Profile Link" 
-  userProfileLink.href = card.html_url;
+  userProfileLink.href = data.html_url;
   userFollowers.textContent = `Followers: ${data.followers}`
   userFollowing.textContent = `Following: ${data.following}`;
   userBio.textContent = data.bio;
