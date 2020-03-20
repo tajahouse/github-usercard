@@ -1,6 +1,7 @@
 /* Step 1: using axios, send a GET request to the following URL 
            (replacing the palceholder with your Github name):
            https://api.github.com/users/tajahouse
+           https://api.github.com/users/tajahouse/followers
 */
 
 //Setting up
@@ -47,7 +48,49 @@ const followersArray = [];
 </div>
 
 */
+const cardCreator = data => {
+  const card = document.createElement('div');
+  const image = document.createElement('img');
+  const cardInfo = document.createElement('div');
+  const userTitle = document.createElement('h3');
+  const userName = document.createElement('p');
+  const userLocation = document.createElement('p');
+  const userProfile = document.createElement('p');
+  const userProfileLink = document.createElement('a');
+  const userFollowers = document.createElement('p');
+  const userFollowing = document.createElement('p');
+  const userBio = document.createElement('p');
 
+  image.src = data.avatar_url;
+  userTitle.textContent = data.name;
+  userName.textContent = data.login;
+  userLocation.textContent = data.location;
+  userProfileLink.textContent = "Profile Link" 
+  userProfileLink.href = card.html_url;
+  userFollowers.textContent = data.followers;
+  userFollowing.textContent = data.following;
+  userBio.textContent = data.bio;
+
+
+
+  card.classList.add('card');
+  cardInfo.classList.add('card-info');
+  userTitle.classList.add('name');
+  userName.classList.add('username');
+
+  card.appendChild(image)
+  card.appendChild(cardInfo)
+  cardInfo.appendChild(userTitle)
+  cardInfo.appendChild(userName)
+  cardInfo.appendChild(userLocation)
+  cardInfo.appendChild(userProfile)
+  cardInfo.appendChild(userFollowers)
+  cardInfo.appendChild(userFollowing)
+  cardInfo.appendChild(userBio)
+  userProfile.appendChild(userProfileLink)
+
+  return card
+}
 
 
 /* List of LS Instructors Github username's: 
@@ -57,10 +100,17 @@ const followersArray = [];
   luishrd
   bigknell
 */
+
+const entryPoint = document.querySelector('.cards');
+
 axios.get("https://api.github.com/users/tajahouse")//semicolons will break the chain
+
 .then(response =>{
-  console.log('response', response.data)
+  console.log('my info is', response.data)
+const data = response.data;
+console.log(data);
+entryPoint.appendChild(cardCreator(data))
 })
 .catch(err =>{
-  console.log('All wrong girl!')
+  console.log('All wrong girl!', err)
 });
