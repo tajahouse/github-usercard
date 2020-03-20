@@ -67,8 +67,8 @@ const cardCreator = data => {
   userLocation.textContent = data.location;
   userProfileLink.textContent = "Profile Link" 
   userProfileLink.href = card.html_url;
-  userFollowers.textContent = data.followers;
-  userFollowing.textContent = data.following;
+  userFollowers.textContent = `Followers: ${data.followers}`
+  userFollowing.textContent = `Following: ${data.following}`;
   userBio.textContent = data.bio;
 
 
@@ -114,3 +114,18 @@ entryPoint.appendChild(cardCreator(data))
 .catch(err =>{
   console.log('All wrong girl!', err)
 });
+
+axios.get("https://api.github.com/users/tajahouse/followers")
+.then(information =>{
+  console.log('friends info', information.data)
+  const friends = information.data;
+  console.log(friends);
+ 
+  friends.forEach(data =>{
+    const friendCard = cardCreator(data)
+    entryPoint.appendChild(cardCreator(data));
+  })
+})
+.catch(err =>{
+  console.log('All wrong girl!', err)
+})
