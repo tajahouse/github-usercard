@@ -59,6 +59,7 @@ const cardCreator = data => {
   const userProfileLink = document.createElement('a');
   const userFollowers = document.createElement('p');
   const userFollowing = document.createElement('p');
+  const userRepos = document.createElement('p');
   const userBio = document.createElement('p');
 
   image.src = data.avatar_url;
@@ -69,7 +70,9 @@ const cardCreator = data => {
   userProfileLink.href = data.html_url;
   userFollowers.textContent = `Followers: ${data.followers}`
   userFollowing.textContent = `Following: ${data.following}`;
+  userRepos.textContent = `Repos: ${data.public_repos}`;
   userBio.textContent = data.bio;
+  
 
 
 
@@ -77,6 +80,7 @@ const cardCreator = data => {
   cardInfo.classList.add('card-info');
   userTitle.classList.add('name');
   userName.classList.add('username');
+  userRepos.classList.add('public-repos')
 
   card.appendChild(image)
   card.appendChild(cardInfo)
@@ -86,6 +90,7 @@ const cardCreator = data => {
   cardInfo.appendChild(userProfile)
   cardInfo.appendChild(userFollowers)
   cardInfo.appendChild(userFollowing)
+  cardInfo.appendChild(userRepos)
   cardInfo.appendChild(userBio)
   userProfile.appendChild(userProfileLink)
 
@@ -122,8 +127,13 @@ axios.get("https://api.github.com/users/tajahouse/followers")
   console.log(friends);
  
   friends.forEach(data =>{
-    const friendCard = cardCreator(data)
-    entryPoint.appendChild(cardCreator(data));
+    const friendCard = data.url
+    axios.get(`${friendCard}`)
+    .then(res =>{
+      const followersData = res.data
+      const card = cardCreator(followersData)
+      entryPoint.appendChild(card);
+    })
   })
 })
 .catch(err =>{
