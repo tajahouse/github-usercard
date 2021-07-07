@@ -1,7 +1,10 @@
 /* Step 1: using axios, send a GET request to the following URL 
            (replacing the palceholder with your Github name):
-           https://api.github.com/users/<your name>
+           https://api.github.com/users/tajahouse
+           https://api.github.com/users/tajahouse/followers
 */
+
+//Setting up
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -24,7 +27,7 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = []; 
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -45,6 +48,55 @@ const followersArray = [];
 </div>
 
 */
+const cardCreator = data => {
+  const card = document.createElement('div');
+  const image = document.createElement('img');
+  const cardInfo = document.createElement('div');
+  const userTitle = document.createElement('h3');
+  const userName = document.createElement('p');
+  const userLocation = document.createElement('p');
+  const userProfile = document.createElement('p');
+  const userProfileLink = document.createElement('a');
+  const userFollowers = document.createElement('p');
+  const userFollowing = document.createElement('p');
+  const userRepos = document.createElement('p');
+  const userBio = document.createElement('p');
+
+  image.src = data.avatar_url;
+  userTitle.textContent = data.name;
+  userName.textContent = data.login;
+  userLocation.textContent = data.location;
+  userProfileLink.textContent = "Profile Link" 
+  userProfileLink.href = data.html_url;
+  userFollowers.textContent = `Followers: ${data.followers}`
+  userFollowing.textContent = `Following: ${data.following}`;
+  userRepos.textContent = `Repos: ${data.public_repos}`;
+  userBio.textContent = data.bio;
+  
+
+
+
+  card.classList.add('card');
+  cardInfo.classList.add('card-info');
+  userTitle.classList.add('name');
+  userName.classList.add('username');
+  userRepos.classList.add('public-repos')
+
+  card.appendChild(image)
+  card.appendChild(cardInfo)
+  cardInfo.appendChild(userTitle)
+  cardInfo.appendChild(userName)
+  cardInfo.appendChild(userLocation)
+  cardInfo.appendChild(userProfile)
+  cardInfo.appendChild(userFollowers)
+  cardInfo.appendChild(userFollowing)
+  cardInfo.appendChild(userRepos)
+  cardInfo.appendChild(userBio)
+  userProfile.appendChild(userProfileLink)
+
+  return card
+}
+
 
 /* List of LS Instructors Github username's: 
   tetondan
@@ -53,3 +105,37 @@ const followersArray = [];
   luishrd
   bigknell
 */
+
+const entryPoint = document.querySelector('.cards');
+
+axios.get("https://api.github.com/users/tajahouse")//semicolons will break the chain
+
+.then(response =>{
+  console.log('my info is', response.data)
+const data = response.data;
+console.log(data);
+entryPoint.appendChild(cardCreator(data))
+})
+.catch(err =>{
+  console.log('All wrong girl!', err)
+});
+
+axios.get("https://api.github.com/users/tajahouse/followers")
+.then(information =>{
+  console.log('friends info', information.data)
+  const friends = information.data;
+  console.log(friends);
+ 
+  friends.forEach(data =>{
+    const friendCard = data.url
+    axios.get(`${friendCard}`)
+    .then(res =>{
+      const followersData = res.data
+      const card = cardCreator(followersData)
+      entryPoint.appendChild(card);
+    })
+  })
+})
+.catch(err =>{
+  console.log('All wrong girl!', err)
+})
